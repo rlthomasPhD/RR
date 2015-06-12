@@ -22,6 +22,7 @@ mean(steps.day$steps)
 
 
 ```
+mean = 10766.19
 
 #Average daily activity pattern
 #Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
@@ -33,6 +34,7 @@ plot(steps.interval, type = "l")
 steps.interval$interval[which.max(steps.interval$steps)]
 
 ```
+max = 835
 
 #Imputing missing values
 
@@ -50,6 +52,7 @@ steps.day <- aggregate(steps ~ date, data = activity, FUN = sum)
 barplot(steps.day$steps, names.arg = steps.day$date, xlab = "date", ylab = "steps")
 
 ```
+sum na = 2304
 
 #Differences between Weekday and weekend activity patterns
 
