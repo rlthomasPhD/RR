@@ -6,7 +6,7 @@ output: html_document
 ---
 
 #Loading and preprocessing the data
-#Mean number of steps taken per day
+#Mean number of steps taken per day and bar plot
 ```{r}
 
 activity <- read.csv("activity.csv", colClasses = c("numeric", "character", 
@@ -26,7 +26,7 @@ mean = 10766.19
 median = 10765
 
 #Average daily activity pattern
-#Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+#Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 ```{r}
 
@@ -37,7 +37,7 @@ steps.interval$interval[which.max(steps.interval$steps)]
 ```
 max = 835
 
-#Imputing missing values
+#Imputing missing values and histogram
 
 ```{r}
 
