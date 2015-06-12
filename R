@@ -1,0 +1,93 @@
+
+> #Loading and preprocessing the data
+> #Mean number of steps taken per day
+> ```{r}
+
+> activity <- read.csv('C:/Users/thomasr/Documents/activity.csv', colClasses = c("numeric", "character", 
++                                                     "numeric"))
+> summary(activity)
+     steps            date              interval     
+ Min.   :  0.00   Length:17568       Min.   :   0.0  
+ 1st Qu.:  0.00   Class :character   1st Qu.: 588.8  
+ Median :  0.00   Mode  :character   Median :1177.5  
+ Mean   : 37.38                      Mean   :1177.5  
+ 3rd Qu.: 12.00                      3rd Qu.:1766.2  
+ Max.   :806.00                      Max.   :2355.0  
+ NA's   :2304                                        
+> head(activity)
+  steps       date interval
+1    NA 2012-10-01        0
+2    NA 2012-10-01        5
+3    NA 2012-10-01       10
+4    NA 2012-10-01       15
+5    NA 2012-10-01       20
+6    NA 2012-10-01       25
+> names(activity)
+[1] "steps"    "date"     "interval"
+> 
+> steps.day <- aggregate(steps ~ date, data = activity, FUN = sum)
+> barplot(steps.day$steps, names.arg = steps.day$date, xlab = "date", ylab = "steps")
+> 
+> mean(steps.day$steps)
+[1] 10766.19
+> median(steps.day$steps)
+[1] 10765
+
+> #Average daily activity pattern
+> #Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+> 
+> ```{r}
+
+> steps.interval <- aggregate(steps ~ interval, data = activity, FUN = mean)
+> plot(steps.interval, type = "l")
+> steps.interval$interval[which.max(steps.interval$steps)]
+[1] 835
+> 
+
+> #Imputing missing values
+> 
+> ```{r}
+
+> 
+> sum(is.na(activity))
+[1] 2304
+> 
+> activity <- merge(activity, steps.interval, by = "interval", suffixes = c("", 
++                                                                           ".y"))
+> na <- is.na(activity$steps)
+> activity$steps[na] <- activity$steps.y[na]
+> activity <- activity[, c(1:3)]
+> 
+> steps.day <- aggregate(steps ~ date, data = activity, FUN = sum)
+> barplot(steps.day$steps, names.arg = steps.day$date, xlab = "date", ylab = "steps")
+> 
+> ```
+> #Differences between Weekday and weekend activity patterns
+> 
+> ```{r}
+
+> 
+> day <- function(date) {
++   if (weekdays(as.Date(date)) %in% c("Saturday", "Sunday")) {
++     "weekend"
++   } else {
++     "weekday"
++   }
++ }
+> activity$day <- as.factor(sapply(activity$date, day))
+> head(activity$day)
+[1] weekday weekday weekend weekday weekend weekday
+Levels: weekday weekend
+> #Graph
+> 
+> ```{r}
+
+> 
+> par(mfrow = c(2, 1))
+> for (type in c("weekend", "weekday")) {
++   steps.type <- aggregate(steps ~ interval, data = activity, subset = activity$day == 
++                             type, FUN = mean)
++   plot(steps.type, type = "l", main = type)
++ }
+> 
+
